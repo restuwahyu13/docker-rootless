@@ -27,17 +27,16 @@ COPY --from=start --chown=$USER_GID:$USER_UID ./home/$USER_ACCOUNT/ ./
 ###############################
 # UPGRADE SYSTEM STAGE 4
 ###############################
-# FROM asset as upgrade
-#   && apt-get autoremove \
-#   && apt-get autoclean \
-#   && apt-get update \
-#   && apt-get upgrade -y \
-#   && apt-get build-essential -y
+FROM asset as upgrade
+RUN apt-get autoremove \
+  && apt-get autoclean \
+  && apt-get update \
+  && apt-get upgrade -y
 
 ###############################
 # INSTALLATION STAGE 5
 ###############################
-FROM asset as install
+FROM upgrade as install
 RUN npm cache clean -f \
   && npm config delete proxy \
   && npm config delete https-proxy \
