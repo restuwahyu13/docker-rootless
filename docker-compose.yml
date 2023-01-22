@@ -15,8 +15,8 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - /home/node
-      - /home/node/node_modules
+      - /home/express
+      - /home/express/node_modules
     networks:
       - node_network
 ### ===================================

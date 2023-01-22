@@ -3,17 +3,18 @@
 ###############################
 FROM node:16.19-bullseye-slim as start
 LABEL MAINTENER='Restu Wahyu Saputra'
-COPY ./package.*json ./home/node/
-COPY ./ ./home/node/
+ARG ROOT='root'
+ARG USER_ACCOUNT='express'
+ARG DEFAULT_USER_ACCOUNT='node'
+ARG USER_GID=999
+ARG USER_UID=666
+COPY ./package.*json ./home/$USER_ACCOUNT/
+COPY ./ ./home/$USER_ACCOUNT/
 
 ###############################
 # SET ENVIRONMENT STAGE 2
 ###############################
 FROM start as environment
-ARG ROOT='root'
-ARG USER_ACCOUNT='node'
-ARG USER_GID=1000
-ARG USER_UID=1000
 ENV HOME=/home/$USER_ACCOUNT \
   NODE_OPTIONS=--max_old_space_size=32768
 
@@ -22,7 +23,7 @@ ENV HOME=/home/$USER_ACCOUNT \
 ###############################
 FROM environment as asset
 WORKDIR /home/$USER_ACCOUNT
-COPY --from=start --chown=$USER_GID:$USER_UID ./home/$USER_ACCOUNT/ ./
+COPY --from=start --chown=$DEFAULT_USER_ACCOUNT:$DEFAULT_USER_ACCOUNT ./home/$USER_ACCOUNT/ ./
 
 ###############################
 # UPGRADE SYSTEM STAGE 4
@@ -56,7 +57,7 @@ RUN npm cache clean -f \
 # PERMISSION STAGE 6
 ###############################
 FROM install as permission
-RUN groupdel -f $USER_ACCOUNT && userdel -f $USER_ACCOUNT \
+RUN groupdel -f $DEFAULT_USER_ACCOUNT && userdel -f $DEFAULT_USER_ACCOUNT \
   && groupadd -r -g $USER_GID $USER_ACCOUNT \
   && useradd -r -u $USER_UID -g $USER_GID $USER_ACCOUNT -s /bin/false -d /home/$USER_ACCOUNT -M \
   && groupmod -g $USER_GID $USER_ACCOUNT \
