@@ -1,0 +1,19 @@
+{
+	"name": "docker-rootless-mode",
+	"version": "1.0.0",
+	"description": "Docker rootless mode for production environment",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"keywords": [
+		"nodejs",
+		"docker",
+		"rootless"
+	],
+	"author": "Restu Wahyu Saputra",
+	"license": "MIT",
+	"dependencies": {
+		"express": "^4.18.2"
+	}
+}
