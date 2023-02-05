@@ -29,10 +29,21 @@ COPY --from=start --chown=$DEFAULT_USER_ACCOUNT:$DEFAULT_USER_ACCOUNT ./home/$US
 # UPGRADE SYSTEM STAGE 4
 ###############################
 FROM asset as upgrade
-RUN apt-get autoremove \
-  && apt-get autoclean \
+RUN apt list --upgradable \
+  && apt update \
+  && apt autoremove -y \
+  && apt autoclean -y \
+  && apt upgrade -y \
+  && apt full-upgrade -y \
+  && apt-get autoremove -y \
+  && apt-get autoclean -y \
   && apt-get update \
-  && apt-get upgrade -y
+  && apt-get upgrade -y \
+  && apt-get full-upgrade -y \
+  && apt-get install build-essential -y \
+  unattended-upgrades  \
+  apt-listchanges \
+  && dpkg-reconfigure unattended-upgrades
 
 ###############################
 # INSTALLATION STAGE 5
