@@ -4,7 +4,8 @@
 	"description": "Docker rootless mode for production environment",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js"
+		"start": "node index.js",
+		"start:pm2": "pm2-runtime start pm2.config.js"
 	},
 	"keywords": [
 		"nodejs",

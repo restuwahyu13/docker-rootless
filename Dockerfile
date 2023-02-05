@@ -1,9 +1,8 @@
-###############################
+FROM keymetrics/pm2:latest
 # START STAGE 1
 ###############################
 FROM node:16.19-bullseye-slim as start
 LABEL MAINTENER='Restu Wahyu Saputra'
-ARG ROOT='root'
 ARG USER_ACCOUNT='express'
 ARG DEFAULT_USER_ACCOUNT='node'
 ARG USER_GID=999
@@ -16,7 +15,8 @@ COPY ./ ./home/$USER_ACCOUNT/
 ###############################
 FROM start as environment
 ENV HOME=/home/$USER_ACCOUNT \
-  NODE_OPTIONS=--max_old_space_size=32768
+  NODE_OPTIONS=--max_old_space_size=32768 \
+  PM2_HOME=/var/tmp
 
 ###############################
 # COPY ASSET STAGE 3
@@ -51,6 +51,7 @@ RUN npm cache clean -f \
   && npm config set fetch-retry-maxtimeout 12000000 \
   && npm config set fetch-timeout 30000000 \
   && npm config set prefer-offline true \
+  && npm i pm2 -g \
   && npm i --loglevel verbose
 
 ###############################
@@ -74,4 +75,4 @@ USER $USER_ACCOUNT
 # FINAL STAGE 7
 ###############################
 FROM permission as final
-CMD npm start
+CMD npm run start:pm2

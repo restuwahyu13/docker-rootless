@@ -13,10 +13,10 @@ services:
       retries: 3
       start_period: 15s
     ports:
-      - '3000:3000'
+      - '4000:4000'
     volumes:
-      - /home/express
-      - /home/express/node_modules
+      - /usr/src/express
+      - /usr/src/express/node_modules
     networks:
       - node_network
 ### ===================================
