@@ -1,4 +1,4 @@
-FROM keymetrics/pm2:latest
+###############################
 # START STAGE 1
 ###############################
 FROM node:16.19-bullseye-slim as start
